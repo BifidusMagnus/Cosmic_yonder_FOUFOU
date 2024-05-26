@@ -2212,6 +2212,10 @@ int fight(Mob mob, Player * player, WINDOW * win, int winlength, int winwidth, i
 }
 
 int pauseMenu(int winwidth, int winlength, int winposx, int winposy,WINDOW * win, int * stop){
+    /*Function which assure the use of a menu during the game with two option : resume which make you go back to the game
+    or save and quit which save your progression and then leave the game.
+    This function take 6 arguments a window, her length and width also her x and y position on the screen and an intger pointer stop 
+    who keep the time spended on the menu. */
 
     int y = 0;
 
@@ -2231,7 +2235,7 @@ int pauseMenu(int winwidth, int winlength, int winposx, int winposy,WINDOW * win
 
         mvwprintw(win, (winlength/2)+(winlength/4), (winwidth/2)-(winwidth/4), "SAVE AND QUIT");
 
-        mvwprintw(win, (winlength/2)-(winlength/4) + ((winlength/4)*2*y), (winwidth/2)-(winwidth/4) - 4, "-->");
+        mvwprintw(win, (winlength/2)-(winlength/4) + ((winlength/4)*2*y), (winwidth/2)-(winwidth/4) - 4, "-->"); // Display menu
 
         box(win, 0, 0);
 
@@ -2244,7 +2248,7 @@ int pauseMenu(int winwidth, int winlength, int winposx, int winposy,WINDOW * win
         if(ch == KEY_UP && y > 0){
             y--;
         }
-        if(ch == KEY_DOWN && y < 1){
+        if(ch == KEY_DOWN && y < 1){ // This part assure the move of the arrow
             y++;
         }
 
@@ -2252,11 +2256,11 @@ int pauseMenu(int winwidth, int winlength, int winposx, int winposy,WINDOW * win
             exit = 0;
         }
 
-        if(ch == ENTER && y == 1){
+        if(ch == ENTER && y == 1){ // This part assure the exit option depending on the position of the arrow and therefore the option chosen
             exit = 1;
         }
 
-        if(ch == 27){
+        if(ch == 27){ // If the player press esc he just leave the menu
             exit = 0;
         }
 
@@ -2272,15 +2276,17 @@ int pauseMenu(int winwidth, int winlength, int winposx, int winposy,WINDOW * win
         return 1;
     }
     else{
-        return -1;
+        return -1; // This part manage the return option depending the option choosen 1 resume  -1 save and quit
     }
     
     
 }
 
 int minigame1(WINDOW * win, int winwidth, int winlength){
+    /*Function which is the first task of the game, its a simple function were the player copy a 
+    sentence displayed on the screen. The function return 1 in case of a success or 0 if the player loose, she take 3 argument a window, his length and width*/
 
-    char c[20] = "VOID";
+    char c[20] = "VOID"; // Char tab were the player will write the message
 
     int ch = 0;
 
@@ -2316,7 +2322,7 @@ int minigame1(WINDOW * win, int winwidth, int winlength){
 
         
 
-    while(strcmp(c, "/REB00T_SYS.exe") != 0 && ex < 3){
+    while(strcmp(c, "/REB00T_SYS.exe") != 0 && ex < 3){ // While the answer isn't correct or the the nmber of try is <3 the user can re try to write the line 
 
         ex++;
 
@@ -2338,7 +2344,7 @@ int minigame1(WINDOW * win, int winwidth, int winlength){
 
     noecho();
 
-    if(ex == 3){
+    if(ex == 3){ // this part manage the return in case of win or loose
         wclear(win);
 
         mvwprintw(win, winwidth/2, winlength/3, "YOU LOOSE");
@@ -2375,6 +2381,8 @@ int minigame1(WINDOW * win, int winwidth, int winlength){
 }
 
 int minigame2(WINDOW * win, int winwidth, int winlength){
+     /*Function which is the second task of the game, its a simple function were the player move an arrow
+    until she reach the right position. The function return 1 in case of a win or 0 if the player loose, she take 3 argument a window, his length and width*/
 
     int ch = 0;
 
@@ -2382,7 +2390,7 @@ int minigame2(WINDOW * win, int winwidth, int winlength){
 
     int ex = 0;
 
-    int wherestop = ((rand()%100)%41)+10;
+    int wherestop = ((rand()%100)%41)+10; // Initialization of the position of the cursor
 
     wclear(win);
 
@@ -2408,7 +2416,7 @@ int minigame2(WINDOW * win, int winwidth, int winlength){
         mvwprintw(win, (winwidth/2)+1, winlength/5+wherestop, "*");
 
         mvwprintw(win, (winwidth/2)+3, winlength/5+vartuch, "^");
-        mvwprintw(win, (winwidth/2)+4, winlength/5+vartuch, "|");
+        mvwprintw(win, (winwidth/2)+4, winlength/5+vartuch, "|"); // Window of the minigame display
 
         box(win, 0, 0);
 
@@ -2417,7 +2425,7 @@ int minigame2(WINDOW * win, int winwidth, int winlength){
         ch = getch();
 
 
-        while (ch == KEY_RIGHT && vartuch < 50)
+        while (ch == KEY_RIGHT && vartuch < 50)  // The player can only go on the right direction and must continue to press the key right to continue the loop
         {
             
 
@@ -2436,7 +2444,7 @@ int minigame2(WINDOW * win, int winwidth, int winlength){
             mvwprintw(win, (winwidth/2)+1, winlength/5+wherestop, "*");
 
             mvwprintw(win, (winwidth/2)+3, winlength/5+vartuch, "^");
-            mvwprintw(win, (winwidth/2)+4, winlength/5+vartuch, "|");
+            mvwprintw(win, (winwidth/2)+4, winlength/5+vartuch, "|"); // Window of the minigame display and manage the player arrow position
 
             box(win, 0, 0);
             
@@ -2458,7 +2466,7 @@ int minigame2(WINDOW * win, int winwidth, int winlength){
 
     }
 
-    if(ex == 4){
+    if(ex == 4){ // Winning condition 
         wclear(win);
 
         mvwprintw(win, winwidth/2, winlength/3, "YOU WIN");
@@ -2489,14 +2497,16 @@ int minigame2(WINDOW * win, int winwidth, int winlength){
 }
 
 int minigame3(WINDOW * win, int winwidth, int winlength){
+    /*Function which is the third task of the game, its a simple function simulate a plus or less game.
+    The function return 1 in case of a win or 0 if the player loose , she take 3 argument a window, his length and width*/
 
     int ch = 0;
 
-    char guess[4] = "NULL";
+    char guess[4] = "NULL"; // variable who keep the player answer 
 
     int ex = 0;
 
-    int mysterynb = (rand()%98)+1;
+    int mysterynb = (rand()%98)+1; //initialization of the mysterious number
 
     wclear(win);
 
@@ -2510,7 +2520,7 @@ int minigame3(WINDOW * win, int winwidth, int winlength){
 
     echo();
 
-    while(ex < 10){
+    while(ex < 10){ // Loop which manage the plus or less algorithm
 
 
         wclear(win);
@@ -3241,22 +3251,7 @@ void startagame(WINDOW * win, int winposx, int winposy, int winlength, int winwi
 
     
 
-    
-
-    
-
-
-
-
-    
-
-    
-
-
-
-    
-    
-    
+  
     
     if(isloaded != 1){
         
